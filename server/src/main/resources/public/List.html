@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>信息列表</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../layui/css/global.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+</head>
+<body>
+<div>
+    <div class="fly-header layui-bg-black">
+        <div class="layui-container">
+            <!--<a class="fly-logo" href="/">
+              <img src="../../images/logo.png" alt="layui">
+            </a>-->
+            <!--<ul class="layui-nav fly-nav layui-hide-xs">
+              <li class="layui-nav-item layui-this">
+                <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+              </li>
+              <li class="layui-nav-item">
+                <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+              </li>
+              <li class="layui-nav-item">
+                <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+              </li>
+            </ul>-->
+
+            <!--<ul class="layui-nav fly-nav-user" id="app">
+              &lt;!&ndash; 登入后的状态 &ndash;&gt;
+              <li class="layui-nav-item">
+                <a class="fly-nav-avatar" href="javascript:;">
+                  &lt;!&ndash;使用v-cloak可以解决查询表达式闪烁的问题&ndash;&gt;
+                  <cite class="layui-hide-xs"  v-cloak >{{peps.userName}}</cite>
+                  <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+                  <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+                  <img  :src="peps.img">
+                </a>
+                <dl class="layui-nav-child">
+                  <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                  <dd><a href="../user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+                  <dd><a href="../user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+                  <hr style="margin: 5px 0;">
+                  <dd><a href="" style="text-align: center;">退出</a></dd>
+                </dl>
+              </li>
+            </ul>-->
+        </div>
+    </div>
+
+    <div class="layui-container fly-marginTop fly-user-main" style="width: 100%">
+        <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+            <!--<li class="layui-nav-item">
+              <a href="home.html">
+                <i class="layui-icon">&#xe609;</i>
+                我的主页
+              </a>
+            </li>-->
+            <li class="layui-nav-item">
+                <a href="index.html">
+                    <i class="layui-icon">&#xe612;</i>
+                    用户中心
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="search.html">
+                    <i class="layui-icon">&#xe615;</i>
+                    信息搜寻
+                </a>
+            </li>
+            <!--<li class="layui-nav-item">
+                <a href="delete.html">
+                    <i class="layui-icon">&#xe640;</i>
+                    删除用户
+                </a>
+            </li>-->
+            <li class="layui-nav-item layui-this">
+                <a href="List.html">
+                    <i class="layui-icon">&#xe62d;</i>
+                    信息列表
+                </a>
+            </li>
+        </ul>
+
+        <div class="site-tree-mobile layui-hide">
+            <i class="layui-icon">&#xe602;</i>
+        </div>
+        <div class="site-mobile-shade"></div>
+
+        <div class="site-tree-mobile layui-hide">
+            <i class="layui-icon">&#xe602;</i>
+        </div>
+        <div class="fly-panel fly-panel-table" pad20>
+            <div class="layui-tab layui-tab-brief" lay-filter="table">
+    <div class="demoTable">
+    <div class="layui-inline">
+        <div class="layui-input-inline" style="width: 150px;">
+        <input class="layui-input" name="commonName" id="name" autocomplete="off" placeholder="请输入登录名">
+        </div>
+        <div class="layui-input-inline" style="width: 150px;">
+        <input class="layui-input" name="ip" id="ip" autocomplete="off" placeholder="请输入IP"style="display: inline-block" required lay-verify="required" >
+        </div>
+        <div class="layui-input-inline" style="width: 150px;">
+        <input type="text" class="layui-input" id="startTime" placeholder="开始时间">
+        </div>
+        <div class="layui-input-inline" style="width: 150px;">
+        <input type="text" class="layui-input" id="endTime" placeholder="结束时间">
+        </div>
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+        <table id="demo" lay-filter="test"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../layui/layui.all.js"></script>
+<script>
+    layui.use('table',function(){
+        var table = layui.table;
+        var laydate = layui.laydate;
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 600
+            ,url: '../log/list.do'//数据接口
+            ,toolbar: 'default'
+            ,totalRow: true //开启合计行
+            ,page: true //开启分页
+            ,skin: 'line'
+            ,response: {
+                statusName: 'state' //规定数据状态的字段名称，默认：code
+                ,statusCode: 200 //规定成功的状态码，默认：0
+                ,msgName: 'message' //规定状态信息的字段名称，默认：msg
+                ,countName: 'count' //规定数据总数的字段名称，默认：count
+                ,dataName: 'data' //规定数据列表的字段名称，默认：data
+            }
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:10, sort: true}
+                ,{field: 'commonName', title: '登录名', width:120, sort: true}
+                ,{field: 'startingTime', title: '开始时间', width:200}
+                ,{field: 'endTime', title: '结束时间', width:200, sort: true}
+                ,{field: 'trustedIp', title: '内网IP', width:150}
+                ,{field: 'trustedPort', title: '端口', width: 120}
+                ,{field: 'protocol', title: '协议', width: 100, sort: true}
+                ,{field: 'remoteIp', title: '远程IP', width: 150, sort: true}
+                ,{field: 'remoteNetmask', title: '远程网关', width: 150}
+                ,{field: 'bytesReceived', title: '接收字节', width: 110,sort: true}
+                ,{field: 'bytesSent', title: '发送字节', width: 115, sort: true}
+            ]]
+            ,id: 'testReload'
+        });
+        /*laydate.render({
+            elem: '#startTime'
+            ,theme: '#393D49'
+        });*/
+        var startTime = laydate.render({
+            elem: '#startTime',
+            done: function(value, date, endDate) {
+                endTime.config.min = {
+                    year: date.year,
+                    month: date.month - 1,
+                    date: date.date,
+                    hours: date.hours,
+                    minutes: date.minutes,
+                    seconds: date.seconds
+                }
+            }
+            ,theme: '#393D49'
+            ,btns: ['clear', 'confirm']
+        });
+        var endTime = laydate.render({
+            elem: '#endTime',
+            min: '2017-09-20'
+            ,theme: '#393D49'
+            ,done: function(value, date, endDate) {
+                startTime.config.max = {
+                    year: date.year,
+                    month: date.month-1,
+                    date: date.date,
+                    hours: date.hours,
+                    minutes: date.minutes,
+                    seconds: date.seconds
+                }
+            }
+            ,btns: ['clear', 'confirm']
+        });
+        /*laydate.render({
+            elem: '#endTime'
+            ,theme: '#393D49'
+        });*/
+        var $ = layui.$, active = {
+            reload: function(){
+                var name = $('#name');
+                var ip=$('#ip');
+                var startTime=$('#startTime');
+                var endTime=$('#endTime');
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        commonName: name.val(),
+                        IP:ip.val(),
+                        startTime:startTime.val(),
+                        endTime:endTime.val()
+                    }
+                }, 'data');
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

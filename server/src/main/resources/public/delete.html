@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>删除用户</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="fly,layui,前端社区">
+    <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+    <link rel="stylesheet" href="../layui/css/layui.css"/>
+    <link rel="stylesheet" href="../layui/css/global.css">
+</head>
+<body>
+<div>
+    <div class="fly-header layui-bg-black">
+        <div class="layui-container">
+            <!--<a class="fly-logo" href="/">
+              <img src="../../images/logo.png" alt="layui">
+            </a>-->
+            <!--<ul class="layui-nav fly-nav layui-hide-xs">
+              <li class="layui-nav-item layui-this">
+                <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+              </li>
+              <li class="layui-nav-item">
+                <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+              </li>
+              <li class="layui-nav-item">
+                <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+              </li>
+            </ul>-->
+
+            <!--<ul class="layui-nav fly-nav-user" id="app">
+              &lt;!&ndash; 登入后的状态 &ndash;&gt;
+              <li class="layui-nav-item">
+                <a class="fly-nav-avatar" href="javascript:;">
+                  &lt;!&ndash;使用v-cloak可以解决查询表达式闪烁的问题&ndash;&gt;
+                  <cite class="layui-hide-xs"  v-cloak >{{peps.userName}}</cite>
+                  <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+                  <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+                  <img  :src="peps.img">
+                </a>
+                <dl class="layui-nav-child">
+                  <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                  <dd><a href="../user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+                  <dd><a href="../user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+                  <hr style="margin: 5px 0;">
+                  <dd><a href="" style="text-align: center;">退出</a></dd>
+                </dl>
+              </li>
+            </ul>-->
+        </div>
+    </div>
+
+    <div class="layui-container fly-marginTop fly-user-main">
+        <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+            <!--<li class="layui-nav-item">
+              <a href="home.html">
+                <i class="layui-icon">&#xe609;</i>
+                我的主页
+              </a>
+            </li>-->
+            <li class="layui-nav-item">
+                <a href="index.html">
+                    <i class="layui-icon">&#xe612;</i>
+                    用户中心
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="search.html">
+                    <i class="layui-icon">&#xe615;</i>
+                    搜寻用户
+                </a>
+            </li>
+            <li class="layui-nav-item layui-this">
+                <a href="delete.html">
+                    <i class="layui-icon">&#xe640;</i>
+                    删除用户
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="List.html">
+                    <i class="layui-icon">&#xe62d;</i>
+                    信息列表
+                </a>
+            </li>
+        </ul>
+
+        <div class="site-tree-mobile layui-hide">
+            <i class="layui-icon">&#xe602;</i>
+        </div>
+        <div class="site-mobile-shade"></div>
+
+        <div class="site-tree-mobile layui-hide">
+            <i class="layui-icon">&#xe602;</i>
+        </div>
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+            <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form layui-form-pane">
+                        <form method="post">
+                            <div class="layui-form-item">
+                                <label for="L_username" class="layui-form-label">VPN用户名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="L_username" name="username"  required lay-verify="username" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="L_vercode" class="layui-form-label">人类验证</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="L_vercode" name="vercode" required lay-verify="vercode" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">
+                                    <span style="color: #c00;">1+1=?</span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="delete" lay-submit>删除用户</button>
+                                <span style="padding-left:20px;">
+                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script src="../layui/layui.js"></script>
+<!--<script>
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        ,uid: -1
+        ,avatar: '../../images/avatar/00.jpg'
+        ,experience: 83
+        ,sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        ,base: '../../mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>-->
+<script>
+    layui.use(['form', 'jquery'], function(){
+        var $ = layui.jquery;
+        var form = layui.form;
+        form.verify({
+            vercode:function(value){
+                var value = $('#L_vercode').val();
+                if(value != 2){
+                    return '问题回答错误';
+                }
+            },
+            username: function(value){ //value：表单的值、item：表单的DOM对象
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '用户名不能有特殊字符并且不能为空';
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(delete)', function(data){
+            var jsondata=data.field;
+            $.ajax({
+                url:'../../vpn/deleteUser.do',
+                type:'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                data:jsondata,
+                cache: false,
+                success:function(data){
+                    layer.msg(data.message);
+                }
+            });
+            //防止页面跳转
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

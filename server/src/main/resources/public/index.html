@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>用户中心</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css"/>
+    <link rel="stylesheet" href="../layui/css/global.css">
+    <link rel="icon" type="image/favicon-icon" href="../static/favicon.ico">
+</head>
+<body>
+    <div class="fly-header layui-bg-black">
+        <div class="layui-container">
+            <ul class="layui-nav fly-nav-user" id="app">
+                <li class="layui-nav-item">
+                    <a class="fly-nav-avatar" href="../user/logout.do">
+                        <span  >用户登出</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+<!---->
+    <div class="layui-container fly-marginTop fly-user-main" style="width: 100%">
+        <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+            <!--<li class="layui-nav-item">
+              <a href="home.html">
+                <i class="layui-icon">&#xe609;</i>
+                我的主页
+              </a>
+            </li>-->
+            <li class="layui-nav-item layui-this">
+                <a href="index.html">
+                    <i class="layui-icon">&#xe612;</i>
+                    商品中心
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="search.html">
+                    <i class="layui-icon">&#xe615;</i>
+                    信息搜寻
+                </a>
+            </li>
+            <!--<li class="layui-nav-item">
+              <a href="delete.html">
+                <i class="layui-icon">&#xe640;</i>
+                删除用户
+              </a>
+            </li>-->
+            <li class="layui-nav-item ">
+                <a href="List.html">
+                    <i class="layui-icon">&#xe62d;</i>
+                    信息列表
+                </a>
+            </li>
+        </ul>
+        <div class="fly-panel fly-panel-table" pad20>
+            <div class="layui-tab layui-tab-brief" lay-filter="table">
+                <div class="demoTable">
+                    <a   href="javascript:;" onclick="load()" style="font-size:15px;display: block; height: 16px;float: right;position: absolute;right: 40px;top: 40px;">
+                        客户端下载
+                    </a>
+                </div>
+                <table id="demo" lay-filter="test"></table>
+            </div>
+        </div>
+    </div>
+<script src="../layui/layui.all.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+<!--<script>
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        ,uid: -1
+        ,avatar: '../../images/avatar/00.jpg'
+        ,experience: 83
+        ,sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        ,base: '../mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>-->
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="execKill">抢购</a>
+        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除用户</a>-->
+    </script>
+  <!--  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+<script>
+    function create() {
+        var $ = layui.jquery;
+        var val=$("#L_username").val();
+        if(val==null||val==undefined||val==""||$.trim(val)==""){
+          layer.msg("用户名不能为空");
+          return
+        }
+        $.ajax({
+            url:'../../vpn/addUser.do',
+            type:'get',
+            contentType: 'application/x-www-form-urlencoded',
+            data:"username="+val,
+            cache: false,
+            success:function(data){
+                if (data.state == 400) {
+                    layer.alert(data.message);
+                }else if(data.state==500) {
+                    layer.alert(data.message);
+                }else{
+                    layer.alert(data.message);
+                    setTimeout(function () {
+                        location.reload(true);
+                    },2000);
+                }
+            }
+        });
+    }
+    layui.use('table',function(){
+        var table = layui.table;
+        //第一个实例
+       var users=table.render({
+            elem: '#demo'
+            ,height: 600
+            ,url: '../item/getAll.do'//数据接口
+            ,toolbar: 'default'
+            ,totalRow: true //开启合计行
+            ,page: true //开启分页
+            ,skin: 'line'
+            ,response: {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                ,statusCode: 200 //规定成功的状态码，默认：0
+                ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                ,countName: 'count' //规定数据总数的字段名称，默认：count
+                ,dataName: 'data' //规定数据列表的字段名称，默认：data
+            }
+            //fixed: 'right',
+            ,cols: [[ //表头
+               { field:'itemName', title: '商品名称', width:425,align: "center"},
+                {field: 'total', title: '当前剩余', width:420, align: "center"}
+                ,{field: 'startTime', title: '开始时间', width:600, align: "center"}
+                ,{ field:'endTime', title: '结束时间', width:425,align: "center"}
+               ,{ title:'操作', toolbar: '#barDemo', width:425,align: "center"}
+            ]]
+            ,id: 'testReload'
+        });
+        var $ = layui.$, active = {
+            reload: function(){
+                var name = $('#name');
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        username: name.val()
+                    }
+                }, 'data');
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //监听行工具事件 test 为<table id="demo" lay-filter="test"></table> 其中lay-filter 对应的值
+        table.on('tool(test)', function(obj){
+            var data = obj.data.id;
+            console.log(data);
+            console.log(obj.data.id);
+             if(obj.event === 'execKill'){
+                layer.confirm('是否开始抢购？', function(index){
+                    $.ajax({
+                        url:'../item/execKill.do',
+                        type:'get',
+                        contentType: 'application/x-www-form-urlencoded',
+                        data:"id="+data,
+                        cache: false,
+                        success:function(data){
+                            if (data.code == 400) {
+                                layer.alert(data.msg);
+                            }else if(data.code==300) {
+                                layer.alert(data.msg);
+                            }else{
+                                layer.alert(data.msg);
+                                //两秒后刷新页面
+                                /*setTimeout(function () {
+                                    location.reload(true);
+                                },200000);*/
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+    function load() {
+        window.open("https://fdoc.epoint.com.cn:3366/openvpn/","_blank");
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.epoint.kill.model.mapper.ItemKillMapper" >
+  <resultMap id="BaseResultMap" type="com.epoint.kill.model.entity.ItemKill" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="is_active" property="isActive" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_id, total, start_time, end_time, is_active, create_time
+  </sql>
+
+
+  <!--查询待秒杀的活动商品列表-->
+  <!--is_active为1代表当前商品可以参加秒杀-->
+  <!--item_kill 为参加秒杀商品的详情表，该表的item_id字段与item 表中id相关联-->
+  <!--CASE WHEN函数 如果当前时间处于秒杀时间段内并且总数大于1那么结果为1 并将该结果赋给属性canKill 为1代表当前商品可以秒杀-->
+  <select id="selectAll" resultType="com.epoint.kill.model.entity.ItemKill">
+    SELECT
+      item_kill.*,
+      item.name AS itemName,
+      (
+        CASE WHEN (now() BETWEEN item_kill.start_time AND item_kill.end_time AND item_kill.total > 0)
+          THEN 1
+        ELSE 0
+        END
+      )      AS canKill
+    FROM item_kill  LEFT JOIN item  ON item.id = item_kill.item_id
+    WHERE item_kill.is_active = 1
+  </select>
+
+  <!--获取秒杀详情-->
+  <select id="selectById" resultType="com.epoint.kill.model.entity.ItemKill">
+    SELECT
+      a.*,
+      b.name AS itemName,
+      (
+        CASE WHEN (now() BETWEEN a.start_time AND a.end_time AND a.total > 0)
+          THEN 1
+        ELSE 0
+        END
+      )      AS canKill
+    FROM item_kill AS a LEFT JOIN item AS b ON b.id = a.item_id
+    WHERE a.is_active = 1 AND a.id= #{id} AND a.total>0
+  </select>
+
+
+
+
+
+
+
+
+
+  <!--抢购商品，剩余数量减一-->
+  <update id="updateKillItem">
+    UPDATE item_kill
+    SET total = total - 1
+    WHERE
+        id = #{killId} AND total>0
+  </update>
+
+
+
+
+
+
+  <!--获取秒杀详情V2-->
+  <select id="selectByIdV2" resultType="com.epoint.kill.model.entity.ItemKill">
+    SELECT
+      a.*,
+      b.name AS itemName,
+      (CASE WHEN (now() BETWEEN a.start_time AND a.end_time)
+        THEN 1
+       ELSE 0
+       END)  AS canKill
+    FROM item_kill AS a LEFT JOIN item AS b ON b.id = a.item_id
+    WHERE a.is_active = 1 AND a.id =#{id} AND a.total>0
+  </select>
+
+
+
+
+
+
+
+
+
+
+  <!--抢购商品，剩余数量减一-->
+  <update id="updateKillItemV2">
+    UPDATE item_kill
+    SET total = total - 1
+    WHERE id = #{killId} AND total>0
+  </update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
